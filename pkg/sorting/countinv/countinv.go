@@ -3,7 +3,7 @@ package countinv
 import (
 	"errors"
 
-	"github.com/adammccartney/algorill/pkg/queue"
+	"github.com/adammccartney/algorill/pkg/datastruct/queue"
 )
 
 // Based on two way merge algorithm from Knuth

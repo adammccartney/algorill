@@ -1,10 +1,8 @@
-package karatsuba_mult_test
+package karatsuba_mult
 
 import (
 	"math/big"
 	"testing"
-
-	"github.com/adammccartney/algorill/pkg/karatsuba_mult"
 )
 
 func TestKaratsubaMult(t *testing.T) {
@@ -12,7 +10,7 @@ func TestKaratsubaMult(t *testing.T) {
 	y, _ := new(big.Int).SetString("9876543210987654321098765432109876543210987654321098765432109876", 10)
 	want, _ := new(big.Int).SetString("12193263113702179522618503273386678859451150739156363359236761158176366412964425393011121414472580028964404791648155158039986984", 10)
 
-	got, err := karatsuba_mult.KaratsubaMult(x, y)
+	got, err := KaratsubaMult(x, y)
 	if err != nil {
 		t.Errorf("KaratsubaMult(%s, %s) error: %s", x.String(), y.String(), err)
 	} else if got.Cmp(want) != 0 {

@@ -1,10 +1,8 @@
-package countinv_test
+package countinv
 
 import (
 	"reflect"
 	"testing"
-
-	"github.com/adammccartney/algorill/pkg/countinv"
 )
 
 type result struct {
@@ -26,7 +24,7 @@ func TestCountInv(t *testing.T) {
 
 	for _, test := range tests {
 		var res result
-		arr, inv, _ := countinv.SortCountInv(test.input)
+		arr, inv, _ := SortCountInv(test.input)
 		res.output = arr
 		res.inv = inv
 		if !reflect.DeepEqual(test.output, res.output) {

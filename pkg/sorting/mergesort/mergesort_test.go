@@ -1,10 +1,6 @@
-package mergesort_test
+package mergesort
 
-import (
-	"testing"
-
-	"github.com/adammccartney/algorill/pkg/mergesort"
-)
+import "testing"
 
 func compareLists(a, b []int) bool {
 	if len(a) != len(b) {
@@ -26,7 +22,7 @@ func TestMergeSortedLists(t *testing.T) {
 
 	expected := []int{87, 503, 512, 677, 703, 765}
 
-	actual, err := mergesort.Merge(listA, listB)
+	actual, err := Merge(listA, listB)
 	if err != nil {
 		t.Errorf("Error merging lists: %v", err)
 	}

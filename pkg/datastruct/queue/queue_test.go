@@ -1,14 +1,12 @@
-package queue_test
+package queue
 
 import (
 	"testing"
-
-	"github.com/adammccartney/algorill/pkg/queue"
 )
 
 func TestGoodQueue(t *testing.T) {
 	nums := []int{1, 2, 3, 4, 5}
-	q := queue.InitQueue(len(nums))
+	q := InitQueue(len(nums))
 
 	// enqueue the numbers
 	for _, n := range nums {
@@ -31,7 +29,7 @@ func TestGoodQueue(t *testing.T) {
 }
 
 func TestEnqueueOverflow(t *testing.T) {
-	q := queue.InitQueue(5)
+	q := InitQueue(5)
 	for i := 0; i < 5; i++ {
 		err := q.Enqueue(i)
 		if err != nil {
@@ -45,7 +43,7 @@ func TestEnqueueOverflow(t *testing.T) {
 }
 
 func TestDequeueUnderflow(t *testing.T) {
-	q := queue.InitQueue(5)
+	q := InitQueue(5)
 	_, err := q.Dequeue()
 	if err == nil {
 		t.Error("expected underflow error")
@@ -53,7 +51,7 @@ func TestDequeueUnderflow(t *testing.T) {
 }
 
 func TestHeadQueue(t *testing.T) {
-	q := queue.InitQueue(5)
+	q := InitQueue(5)
 	for i := 0; i < 5; i++ {
 		err := q.Enqueue(i)
 		if err != nil {
@@ -81,7 +79,7 @@ func TestHeadQueue(t *testing.T) {
 }
 
 func TestEmptyQueue(t *testing.T) {
-	q := queue.InitQueue(5)
+	q := InitQueue(5)
 	if !q.EmptyQueue() {
 		t.Error("expected empty queue")
 	}

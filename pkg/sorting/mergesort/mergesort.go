@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/adammccartney/algorill/pkg/queue"
+	"github.com/adammccartney/algorill/pkg/datastruct/queue"
 )
 
 // Two way merge algorithm, based on Knuth's version [taocp vol3 pg 158]
