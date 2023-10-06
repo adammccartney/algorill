@@ -20,7 +20,7 @@ func TestSwap(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			l, r := test.l, test.r
-			swap(&l, &r)
+			Swap(&l, &r)
 			if !reflect.DeepEqual([]int{l, r}, test.expected) {
 				t.Errorf("Expected %v, but got %v", test.expected, []int{l, r})
 			}
