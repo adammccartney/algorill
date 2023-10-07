@@ -17,7 +17,7 @@ func Quicksort(A []int, l int, r int) {
 	}
 	Swap(&A[l], &A[i]) // make pivot first
 
-	j := Partition(A, l, r) // p = new pivot
+	j := Partition(A, l, r) // j = new pivot
 	Quicksort(A, l, j-1)    // recurse on first part
 	Quicksort(A, j+1, r)    // recurse on second part
 }
