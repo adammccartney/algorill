@@ -74,3 +74,41 @@ func TestList_Reverse(t *testing.T) {
 		})
 	}
 }
+
+func TestList_Find(t *testing.T) {
+	type fields struct {
+		value string
+		next  *List
+	}
+	type args struct {
+		value string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *List
+	}{
+		{name: "test find positive",
+			fields: fields{"SICP", &List{"TAOCP", &List{"PAIP", nil}}},
+			args:   args{"PAIP"},
+			want:   &List{"PAIP", nil},
+		},
+		{name: "test find negative",
+			fields: fields{"SICP", &List{"TAOCP", &List{"PAIP", nil}}},
+			args:   args{"IDK"},
+			want:   nil,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			list := &List{
+				value: tt.fields.value,
+				next:  tt.fields.next,
+			}
+			if got := list.Find(tt.args.value); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("List.Find() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

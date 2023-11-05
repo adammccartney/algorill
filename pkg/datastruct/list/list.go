@@ -30,6 +30,7 @@ func (list *List) Find(value string) *List {
 		if list.value == value {
 			return list
 		}
+		list = list.next
 	}
 	return nil
 }
