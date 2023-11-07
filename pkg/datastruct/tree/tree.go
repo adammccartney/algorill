@@ -12,9 +12,9 @@ type Proc struct {
 	pid      int
 	uid      int
 	ppid     int
+	children *Child
 	parent   *Proc
-	children *Proc
-	next     *Child
+	next     *Proc
 }
 
 type Child struct {
@@ -22,18 +22,65 @@ type Child struct {
 	next  *Child
 }
 
-func (list *Proc) newProc(comm string, pid int, uid int, ppid int) {
+func (tree *Proc) String() string {
+	if tree == nil {
+		return "(empty)"
+	}
+
+	result := ""
+
+	for tree != nil {
+		if len(result) > 0 {
+			result += " > "
+		}
+		result += tree.comm
+		tree = tree.next
+	}
+	return result
 }
 
-func (list *Proc) addChild(child *Proc) {}
+func (list *Proc) newProc(comm string, pid int, uid int) *Proc {
+	return &Proc{comm, pid, uid, 0, nil, nil, nil}
+}
+
+func (list *Proc) addChild(parent *Proc, child *Proc) {
+	var cnew *Child
+	var walk **Child
+	cnew.child = child
+	for walk = &parent.children; *walk != nil; walk = &(*walk).next {
+		if (*walk).child.pid > child.pid {
+			break
+		}
+	}
+	cnew.next = *walk
+	*walk = cnew
+}
+
+func (list *Proc) findProc(pid int) *Proc {
+	for list != nil {
+		if list.pid == pid {
+			return list
+		}
+		list = list.next
+	}
+	return nil
+}
 
 func (list *Proc) addProc(comm string, pid int, uid int, ppid int) {
 	// Create a new process instance
-	// find the position of it's parent in list
-	// if the parent has existing children, add this to the list
+	// either it exists or new
+	this := list.findProc(pid)
+	if this == nil {
+		this = list.newProc(comm, pid, uid)
+	}
+	// find the parent
+	parent := list.findProc(ppid)
+	if parent == nil {
+		parent = list.newProc("?", ppid, 0)
+	}
+	list.addChild(parent, this)
+	this.parent = parent
 }
-
-func findProc() {}
 
 // Construct a tree by reading the proc pseudo-filesystem
 // assumes that miniproc is a string containing records, separator=","
@@ -41,7 +88,8 @@ func readProc(miniproc string) string {
 
 	var list *Proc
 	records := strings.Split(miniproc, ",")
-	for _, r := range records {
+	for _, rr := range records {
+		r := strings.TrimSpace(rr)
 		items := strings.Split(r, " ")
 		comm := items[0]
 		pid, _ := strconv.Atoi(items[1])
@@ -51,7 +99,3 @@ func readProc(miniproc string) string {
 	}
 	return fmt.Sprint(list)
 }
-
-
-//		{name: "test construction logic for tree",
-//			args: args{"(systemd) 1 0 0, (ModemManager) 2 1 0, (abrd-dbug) 3 1 0"}},
