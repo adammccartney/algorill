@@ -6,6 +6,15 @@ import (
 	"strings"
 )
 
+const (
+	sym_empty_2  = "  "
+	sym_branch_2 = "|-"
+	sym_verti_2  = "| "
+	sym_last_2   = "`-"
+	sym_single_3 = "---"
+	sym_first_3  = "-+-"
+)
+
 // Using a concrete type to sketch out a few general functions
 type Proc struct {
 	comm     string
@@ -39,6 +48,37 @@ func (tree *Proc) String() string {
 	return result
 }
 
+func (tree *Proc) Dump(current *Proc, level int, rep int, leaf bool, last bool, prev_uid int, closing int) {
+
+	/* Build up the tree here */
+	var o strings.Builder
+	if tree == nil {
+		fmt.Fprint(&o, "(empty)")
+	}
+	if current == nil {
+		/* Base case, print the tree */
+		fmt.Println(o.String())
+	}
+	if !leaf {
+		for lvl := 0; lvl < level; lvl++ {
+			// the original uses width[] here to determine the width of columns
+			if (lvl == level - 1) {
+				if last {
+					o.writeString(sym_last_2)           // last
+				} else {
+					o.writeString(sym_branch_2)         // branch
+				} else {
+					if { /* if more[lvl+1] */
+					o.writeString(sym_versym_verti_2)   // vert
+				} else {
+					/* print empty */
+					o.writeString(sym_empty_2)
+				}
+		}
+	}
+
+}
+
 func (list *Proc) newProc(comm string, pid int, uid int) *Proc {
 	return &Proc{comm, pid, uid, 0, nil, nil, nil}
 }
@@ -56,7 +96,7 @@ func (list *Proc) Insert(node *Proc) *Proc {
 	return list
 }
 
-func (list *Proc) addChild(parent *Proc, child *Proc) *Proc {
+func (parent *Proc) addChild(child *Proc) *Proc {
 	cnew := &Child{
 		child: &Proc{
 			comm:     child.comm,
@@ -77,15 +117,15 @@ func (list *Proc) addChild(parent *Proc, child *Proc) *Proc {
 		// if the parent has children
 		// walk the list of children reading pids
 		// insert the child at when pid > pid children
-		walk := &parent.children
-		for {
-			if (*walk).child.pid > child.pid {
+		walk := parent.children
+		for walk != nil {
+			if walk.child.pid > child.pid {
 				break
 			}
-			walk = &(*walk).next
+			walk = walk.next
 		}
-		cnew.next = *walk
-		*walk = cnew
+		cnew.next = walk
+		walk = cnew
 	}
 	return parent
 }
@@ -101,18 +141,16 @@ func (list *Proc) findProc(pid int) *Proc {
 }
 
 func (list *Proc) addProc(comm string, pid int, uid int, ppid int) *Proc {
-	// Create a new process instance
-	// either it exists or new
 	this := list.findProc(pid)
 	if this == nil {
 		this = list.newProc(comm, pid, uid)
 	}
-	// find the parent
 	parent := list.findProc(ppid)
 	if parent == nil {
 		parent = list.newProc("?", ppid, 0)
 	}
-	list.addChild(parent, this)
+	//list.addChild(parent, this)
+	parent.addChild(this)
 	this.parent = parent
 	list = list.Insert(this)
 	return list
