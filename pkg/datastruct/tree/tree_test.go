@@ -15,7 +15,7 @@ func Test_readProc(t *testing.T) {
 	}{
 		{name: "test construction logic for tree",
 			args: args{"(systemd) 1 0 0, (ModemManager) 2 0 1, (abrd-dbug) 3 0 1"},
-			want: "(systemd) > (ModemManager) > (abrd-dbug)"},
+			want: "(systemd) > (abrd-dbug) > (ModemManager)"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
