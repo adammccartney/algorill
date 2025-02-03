@@ -63,6 +63,7 @@ func (tree *Proc) Dump(current *Proc, level int, rep int, leaf bool, last bool, 
 		for lvl := 0; lvl < level; lvl++ {
 			// the original uses width[] here to determine the width of columns
 			if (lvl == level - 1) {
+				// either last or not
 				if last {
 					o.writeString(sym_last_2)           // last
 				} else {
