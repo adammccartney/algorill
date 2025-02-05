@@ -32,6 +32,7 @@ func main() {
         m[t.Key] = l
     }
 
+    // Just a sanity check
     var lres *list.List
     for k, _ := range m {
         lres = m[k]
@@ -39,4 +40,10 @@ func main() {
             fmt.Println(e.Value)
         }
     }
+
+    // UI - basically we would like to load the dictionary into memory,
+    // then have a simple loop running that allows the user to query one
+    // word at a time.
+    // Once a query has been submitted, we can make the key and look up the
+    // associated anagrams
 }

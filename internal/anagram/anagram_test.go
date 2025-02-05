@@ -1,7 +1,10 @@
 package anagram
 
 import (
+	"container/list"
+	"io"
 	"reflect"
+    "strings"
 	"testing"
 )
 
@@ -26,8 +29,76 @@ func Test_InitToken(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotT := InitToken(tt.args.word); !reflect.DeepEqual(gotT, tt.wantT) {
+			if gotT, _ := InitToken(tt.args.word); !reflect.DeepEqual(gotT, tt.wantT) {
 				t.Errorf("initToken() = %v, want %v", gotT, tt.wantT)
+			}
+		})
+	}
+}
+
+
+func TestAnagramMap_Load(t *testing.T) {
+	type fields struct {
+		m map[string]*list.List
+	}
+	type args struct {
+		reader io.Reader
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+        {
+			name: "Single word",
+			fields: fields{
+				m: make(map[string]*list.List),
+			},
+			args: args{
+				reader: strings.NewReader("cat\n"),
+			},
+			wantErr: false,
+		},
+		{
+			name: "Two anagrams",
+			fields: fields{
+				m: make(map[string]*list.List),
+			},
+			args: args{
+				reader: strings.NewReader("cat\ndog\nact\n"),
+			},
+			wantErr: false,
+		},
+		{
+			name: "Multiple words with spaces",
+			fields: fields{
+				m: make(map[string]*list.List),
+			},
+			args: args{
+				reader: strings.NewReader("eat tea\ntan nat\nin nit\n"),
+			},
+			wantErr: true,
+		},
+		{
+			name: "Empty input",
+			fields: fields{
+				m: make(map[string]*list.List),
+			},
+			args: args{
+				reader: strings.NewReader(""),
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &AnagramMap{
+				m: tt.fields.m,
+			}
+			if err := a.Load(tt.args.reader); (err != nil) != tt.wantErr {
+				t.Errorf("AnagramMap.Load() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
