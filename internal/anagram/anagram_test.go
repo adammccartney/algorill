@@ -37,9 +37,9 @@ func Test_InitToken(t *testing.T) {
 }
 
 
-func TestAnagramMap_Load(t *testing.T) {
+func TestAnagramDict_Load(t *testing.T) {
 	type fields struct {
-		m map[string]*list.List
+		Map map[string]*list.List
 	}
 	type args struct {
 		reader io.Reader
@@ -54,7 +54,7 @@ func TestAnagramMap_Load(t *testing.T) {
         {
 			name: "Single word",
 			fields: fields{
-				m: make(map[string]*list.List),
+				Map: make(map[string]*list.List),
 			},
 			args: args{
 				reader: strings.NewReader("cat\n"),
@@ -64,7 +64,7 @@ func TestAnagramMap_Load(t *testing.T) {
 		{
 			name: "Two anagrams",
 			fields: fields{
-				m: make(map[string]*list.List),
+				Map: make(map[string]*list.List),
 			},
 			args: args{
 				reader: strings.NewReader("cat\ndog\nact\n"),
@@ -74,7 +74,7 @@ func TestAnagramMap_Load(t *testing.T) {
 		{
 			name: "Multiple words with spaces",
 			fields: fields{
-				m: make(map[string]*list.List),
+				Map: make(map[string]*list.List),
 			},
 			args: args{
 				reader: strings.NewReader("eat tea\ntan nat\nin nit\n"),
@@ -84,7 +84,7 @@ func TestAnagramMap_Load(t *testing.T) {
 		{
 			name: "Empty input",
 			fields: fields{
-				m: make(map[string]*list.List),
+				Map: make(map[string]*list.List),
 			},
 			args: args{
 				reader: strings.NewReader(""),
@@ -94,11 +94,11 @@ func TestAnagramMap_Load(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &AnagramMap{
-				m: tt.fields.m,
+			a := &AnagramDict{
+				Map: tt.fields.Map,
 			}
 			if err := a.Load(tt.args.reader); (err != nil) != tt.wantErr {
-				t.Errorf("AnagramMap.Load() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("AnagramDict.Load() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
